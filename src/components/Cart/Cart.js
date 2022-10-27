@@ -1,10 +1,18 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import classes from './Cart.module.css';
 import Modal from '../UI/Modal';
 import CartContext from '../../store/cart-context';
 import CartItem from './CartItem';
 
 const Cart = (props) => {
+	const [visibleForm, setFormVisible] = useState(false);
+	
+	const showFormOrder = () => {
+		setFormVisible(true);
+	};
+	const hideFormOrder = () => {
+		setFormVisible(false);
+	};
 	const cartCtx = useContext(CartContext);
 
 	const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
@@ -32,7 +40,11 @@ const Cart = (props) => {
 		</ul>
 	);
 	return (
-		<Modal hideCart={props.onClose}>
+		<Modal
+			hideCart={props.onClose}
+			showForm={visibleForm}
+			hideForm={hideFormOrder}
+		>
 			{cartItems}
 			<div className={classes.total}>
 				<span> Total Amount</span>
@@ -42,7 +54,11 @@ const Cart = (props) => {
 				<button className={classes['button--alt']} onClick={props.onClose}>
 					Close
 				</button>
-				{hasItems && <button className={classes.button}>Order</button>}
+				{hasItems && (
+					<button className={classes.button} onClick={showFormOrder}>
+						Order
+					</button>
+				)}
 			</div>
 		</Modal>
 	);
